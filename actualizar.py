@@ -32,7 +32,7 @@ REGIONES = {
 # Convocatorias que no son para el público en general aunque figuren como «personas físicas»
 EXCLUIR = re.compile(
     r"conveni|nominad|nominativ|premio|concurso|certamen|adenda|transferencia a|aportaci[oó]n a|instrumental|"
-    r"asociaci[oó]n|associaci[oó]|fundaci[oó]|federaci[oó]|\bclub\b|\bampa\b|\bafa\b|entitat|parroquia|cofrad|hermandad|"
+    r"asociaci[oó]n|associaci[oó]|fundaci[oó]|federaci[oó]|\bclub\b|\bampa\b|\bafa\b|entitat|parr[oò]quia|cofrad|hermandad|"
     r"subvenci[oó]n directa (a|al) (la |el |los |las )?(universidad|ayuntamiento|colegio|c[aá]mara|instituto|consorcio|sociedad|entidad)|"
     r"gastos de funcionamiento|consejo de la juventud|cooperaci[oó]n internacional|aecid|alianza mundial|"
     r"financiaci[oó]n (del )?transporte p[uú]blico|sanidad vegetal|indemnizaci|"
