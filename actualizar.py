@@ -31,14 +31,23 @@ REGIONES = {
 
 # Convocatorias que no son para el público en general aunque figuren como «personas físicas»
 EXCLUIR = re.compile(
-    r"convenio|nominativ|premio|concurso|certamen|adenda|transferencia a|aportaci[oó]n a|"
-    r"subvenci[oó]n directa (a|al) (la |el |los |las )?(asociaci|fundaci|club|federaci|universidad|ayuntamiento|"
-    r"colegio|c[aá]mara|instituto|consorcio|sociedad|entidad|cofrad|parroquia|hermandad)|"
-    r"flota|parada temporal|pesquer|apicultur|ganader|cineg|deportistas? de alto|"
-    r"modificaci[oó]n de (la )?convocatoria|correcci[oó]n de errores|ampliaci[oó]n del? (cr[eé]dito|presupuesto)|"
+    r"conveni|nominad|nominativ|premio|concurso|certamen|adenda|transferencia a|aportaci[oó]n a|instrumental|"
+    r"asociaci[oó]n|associaci[oó]|fundaci[oó]|federaci[oó]|\bclub\b|\bampa\b|\bafa\b|entitat|parroquia|cofrad|hermandad|"
+    r"subvenci[oó]n directa (a|al) (la |el |los |las )?(universidad|ayuntamiento|colegio|c[aá]mara|instituto|consorcio|sociedad|entidad)|"
+    r"gastos de funcionamiento|consejo de la juventud|cooperaci[oó]n internacional|aecid|alianza mundial|"
+    r"financiaci[oó]n (del )?transporte p[uú]blico|sanidad vegetal|indemnizaci|"
+    r"flota|parada temporal|pesquer|apicultur|ganader|cineg|forestal|deportistas? de alto|"
+    r"modificaci[oó]n de (la )?convocatoria|correcci[oó]n de errores|ampliaci[oó]n del? (plazo|cr[eé]dito|presupuesto)|"
     r"resoluci[oó]n de concesi[oó]n|desistimiento|lista (provisional|definitiva)",
     re.I,
 )
+
+
+def clave(x):
+    """Título normalizado + organismo, para juntar convocatorias repetidas (lotes, ficheros, códigos)."""
+    t = re.sub(r"\(.*?\)|\d+", " ", (x.get("t") or "").lower())
+    t = re.sub(r"[^a-záéíóúüñç ]+", " ", t)
+    return (" ".join(t.split()), (x.get("org") or "").lower())
 
 
 def pedir(ruta, params, intentos=4):
@@ -158,6 +167,13 @@ def main():
             continue
         items.append(x)
 
+    # Una sola entrada por convocatoria repetida (p. ej. 30 lotes de «ayuda de emergencia social»): la que cierra más tarde
+    unicos = {}
+    for x in items:
+        k = clave(x)
+        if k not in unicos or (x.get("fin") or "9999") > (unicos[k].get("fin") or "9999"):
+            unicos[k] = x
+    items = list(unicos.values())
     items.sort(key=lambda x: (x.get("fin") or "9999", x["n"]))
     tmp = SALIDA + ".tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
