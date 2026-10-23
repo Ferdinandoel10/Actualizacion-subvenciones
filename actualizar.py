@@ -15,7 +15,7 @@ from datetime import date, timedelta
 
 API = "https://www.infosubvenciones.es/bdnstrans/api"
 SALIDA = os.environ.get("QMC_SALIDA", "convocatorias.json")
-DIAS_ATRAS = int(os.environ.get("QMC_DIAS", "150"))   # antigüedad máxima de publicación
+DIAS_ATRAS = int(os.environ.get("QMC_DIAS", "365"))   # antigüedad máxima de publicación
 PAUSA = float(os.environ.get("QMC_PAUSA", "0.3"))      # segundos entre peticiones
 MAX_DETALLES = int(os.environ.get("QMC_MAX_DETALLES", "4000"))
 HOY = date.today()
